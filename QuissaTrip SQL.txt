@@ -1,0 +1,59 @@
+CREATE DATABASE  IF NOT EXISTS `quissatrip`;
+USE `quissatrip`;
+ALTER DATABASE `quissatrip` CHARSET = Latin1 COLLATE = latin1_swedish_ci;
+
+DROP TABLE IF EXISTS `entity`;
+CREATE TABLE `entity` (
+	`id` INT NOT NULL AUTO_INCREMENT ,
+	`type` VARCHAR(100) NOT NULL ,
+	`name` VARCHAR(100) NOT NULL ,
+	`address` VARCHAR(100) NOT NULL ,
+	`address_extra` VARCHAR(100) NOT NULL ,
+	`description` LONGTEXT NOT NULL ,
+	`info` LONGTEXT NOT NULL ,
+	`is_commerce` BOOLEAN NOT NULL ,
+	`is_place` BOOLEAN NOT NULL ,
+	`is_event` BOOLEAN NOT NULL ,
+	`is_other` BOOLEAN NOT NULL ,
+	`commerce_category` VARCHAR(70) NOT NULL ,
+	`circuit_id` INT NOT NULL ,
+	`latitude` VARCHAR(100) NOT NULL ,
+	`longitude` VARCHAR(100) NOT NULL ,
+	`open` VARCHAR(50) NOT NULL ,
+	`close` VARCHAR(40) NOT NULL ,
+PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `circuit`;
+CREATE TABLE `circuit` (
+	`id` INT NOT NULL AUTO_INCREMENT ,
+	`nome` VARCHAR(100) NOT NULL ,
+	`descricao`LONGTEXT NOT NULL ,
+PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `commerce_category`;
+CREATE TABLE `commerce_category` (
+	`id` INT NOT NULL AUTO_INCREMENT ,
+	`nome` VARCHAR(100) NOT NULL ,
+	`descricao` LONGTEXT NOT NULL ,
+PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `rolezinho`;
+CREATE TABLE `rolezinho` (
+	`id` INT NOT NULL AUTO_INCREMENT ,
+	`media` VARCHAR(255) NOT NULL ,
+	`user_id` VARCHAR(255) NOT NULL ,
+PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `rolezinho_views`;
+CREATE TABLE `rolezinho_views` (
+	`id` INT NOT NULL AUTO_INCREMENT ,
+	`rolezinho_id` VARCHAR(255) NOT NULL ,
+	`user_view_id` VARCHAR(255) NOT NULL ,
+PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `images`;
+CREATE TABLE `images` (
+	`image_id` INT NOT NULL AUTO_INCREMENT ,
+	`entity_id` VARCHAR(255) NOT NULL ,
+	`image_url` VARCHAR(255) NOT NULL ,
+PRIMARY KEY (`image_id`)) ENGINE = InnoDB;
