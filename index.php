@@ -4,17 +4,16 @@
 	error_reporting(E_ALL);
 
 	require 'vendor/autoload.php';
+	require 'database/connection.php';
+	use Psr\Http\Message\RequestInterface as Request;
+	use Psr\Http\Message\ResponseInterface as Response;
+	use Slim\Http\UploadedFile;
 
 	$app = new \Slim\App(array(
 		'settings' => [
 	        'displayErrorDetails' => true
-	    ],
-		'templates.path' => 'views'
+	    ]
 	));
-
-	use Psr\Http\Message\RequestInterface as Request;
-	use Psr\Http\Message\ResponseInterface as Response;
-	use Slim\Http\UploadedFile;
 
 	/*
 	 *
@@ -40,11 +39,15 @@
 	|                                   Rotas                                       |
 	|                                                                               |
 	\*******************************************************************************/
-	$app->get('/', function ($request, $response, $args) {
+
+	$app->get('/', function ($request, $response) {
 		return $response->withJson(array(
 			'mensagem' => "Bem vindo à API do Aplicativo QuissaTrip"
 		));
 	});
+
+	// Rotas relacionadas as entidades
+	require 'routes/entity.php';
 
 	$app->run();
 ?>
