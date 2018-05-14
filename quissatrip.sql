@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.0
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 09-Maio-2018 às 21:52
--- Versão do servidor: 10.1.31-MariaDB
--- PHP Version: 7.2.4
+-- Generation Time: 14-Maio-2018 às 18:43
+-- Versão do servidor: 10.1.29-MariaDB
+-- PHP Version: 7.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -30,27 +30,27 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `circuit` (
   `id` int(11) NOT NULL,
-  `nome` varchar(100) NOT NULL,
-  `descricao` varchar(300) NOT NULL,
-  `imagem` varchar(500) NOT NULL
+  `name` varchar(100) NOT NULL,
+  `description` varchar(300) NOT NULL,
+  `image` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `circuit`
 --
 
-INSERT INTO `circuit` (`id`, `nome`, `descricao`, `imagem`) VALUES
-(1, 'etnico', 'circuito baseado em locais que são importantes para a identificação da etnia local', 'https://turismo-quissama.000webhostapp.com/uploads/circuitos/imagens/c-e5173.jpg'),
-(2, 'ecologico', 'locais de fauna e flora do municipio', 'https://turismo-quissama.000webhostapp.com/uploads/circuitos/imagens/c-d9b1f.jpg'),
-(3, 'historico', 'locais com importancia historica para o municipio', 'https://turismo-quissama.000webhostapp.com/uploads/circuitos/imagens/c-51639.jpg');
+INSERT INTO `circuit` (`id`, `name`, `description`, `image`) VALUES
+(1, 'Circuito Étnico', 'Circuito baseado em locais que são importantes para a identificação da etnia local', 'https://turismo-quissama.000webhostapp.com/uploads/circuitos/imagens/c-e5173.jpg'),
+(2, 'Circuito Ecologico', 'Locais de fauna e flora do municipio', 'https://turismo-quissama.000webhostapp.com/uploads/circuitos/imagens/c-d9b1f.jpg'),
+(3, 'Circuito Histórico', 'Locais com importancia historica para o municipio', 'https://turismo-quissama.000webhostapp.com/uploads/circuitos/imagens/c-51639.jpg');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `comerce_category`
+-- Estrutura da tabela `commerce_category`
 --
 
-CREATE TABLE `comerce_category` (
+CREATE TABLE `commerce_category` (
   `id` int(255) NOT NULL,
   `nome` varchar(100) NOT NULL,
   `descricao` varchar(500) NOT NULL,
@@ -58,16 +58,16 @@ CREATE TABLE `comerce_category` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Extraindo dados da tabela `comerce_category`
+-- Extraindo dados da tabela `commerce_category`
 --
 
-INSERT INTO `comerce_category` (`id`, `nome`, `descricao`, `imagem`) VALUES
-(1, 'lanchonete', '', ''),
-(2, 'hotel', '', ''),
-(3, 'posto', '', ''),
-(4, 'servico', '', ''),
-(5, 'divercao', '', ''),
-(6, 'banco', '', '');
+INSERT INTO `commerce_category` (`id`, `nome`, `descricao`, `imagem`) VALUES
+(1, 'Lanchonetes', '', ''),
+(2, 'Hotéis', '', ''),
+(3, 'Postos de Gasolina', '', ''),
+(4, 'Serviços', '', ''),
+(5, 'Diversão', '', ''),
+(6, 'Banco', '', '');
 
 -- --------------------------------------------------------
 
@@ -85,7 +85,7 @@ CREATE TABLE `entity` (
   `is_place` tinyint(1) NOT NULL,
   `is_event` tinyint(1) NOT NULL,
   `is_other` tinyint(1) NOT NULL,
-  `comerce_category` int(255) NOT NULL,
+  `commerce_category` int(255) NOT NULL,
   `circuit_id` int(255) NOT NULL,
   `latitude` varchar(50) NOT NULL,
   `longitude` varchar(50) NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE `entity` (
 -- Extraindo dados da tabela `entity`
 --
 
-INSERT INTO `entity` (`name`, `address`, `address_extra`, `description`, `info`, `is_commerce`, `is_place`, `is_event`, `is_other`, `comerce_category`, `circuit_id`, `latitude`, `longitude`, `open`, `close`, `id`) VALUES
+INSERT INTO `entity` (`name`, `address`, `address_extra`, `description`, `info`, `is_commerce`, `is_place`, `is_event`, `is_other`, `commerce_category`, `circuit_id`, `latitude`, `longitude`, `open`, `close`, `id`) VALUES
 ('Canal Campos-Macaé', 'Rua Comendador José Julião', '', 'Construído por escravos durante 17 anos, o Canal foi inaugurado em 1861 e possui cerca de 109 km de extensão, sendo o segundo canal artificial mais longo do mundo.', 'O Canal passa pelas cidades de Campos dos Goytacazes, Quissamã, Carapebus e Macaé.', 0, 1, 0, 0, 0, 1, '-22.10451385', '-41.47272817', '00:00', '23:59', 1),
 ('Museu Casa Quissamã', 'RJ-178', '', 'Criado pela Prefeitura Municipal em 2006, o museu foi residência do primeiro Visconde de Araruama e em seguida, de seu filho, o Visconde de Quissamã.</p><p>O imóvel estava em ruínas, mas foi totalmente restaurado e ambientado com decoração e móveis dos séculos XVIII e XIX. O museu conta com duas salas com memoriais descritivo e ilustrado e catálogo impresso.</p><p><br></p><p>Ao lado do museu, é possível ver um dos poucos exemplares de Baobás no estado do Rio de Janeiro.</p><p>O baobá é um objeto de culto de religiões africanas, a \'árvore da palavra e da sabedoria\' é nativa da ilha de Madagascar, mas está presente, mesmo que de forma discreta, no estado do Rio de Janeiro. Há apenas três delas em território fluminense: no Jardim Botânico da capital, na Ilha de Paquetá e em Quissamã.', '<p>Aberto a visitação de quarta a domingo</p><p>Telefone: 2768-1332</p><p>E-mail: fcultura.quissama@gmail.com</p>', 0, 1, 0, 0, 0, 3, '-22.100872', '-41.476394', '10:00', '17:00', 2),
 ('Fazenda Machadinha', 'Fazenda Machadinha', '', 'Tombada pelo Instituto Estadual do Patrimônio Cultural (Inepac) em 1979, a Fazenda Machadinha possui valor histórico no que restou de sua casa grande, erguida entre 1853 e 1867, senzalas, armazéns e a capela em homenagem a Nossa Senhora do Patrocínio, construídas em 1833.</p><p>A casa grande não pôde ser conservada, mas as senzalas foram restauradas e ganharam anexos que ainda respeitam a arquitetura original, onde descendentes de quilombolas ainda as fazem de lar.', '<p>No local, funciona o Complexo Cultural Fazenda Machadinha</p><p>Telefone: 2768-9300</p>', 0, 1, 0, 0, 0, 1, '-22.033643', '-41.452752', '10:00', '17:00', 3),
@@ -188,6 +188,13 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Extraindo dados da tabela `user`
+--
+
+INSERT INTO `user` (`id`, `nome`, `avatar`) VALUES
+(1, 'Lucas Craveiro Paes', 'https://pbs.twimg.com/profile_images/869292124986126338/keoLQCJh_400x400.jpg');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -198,9 +205,9 @@ ALTER TABLE `circuit`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `comerce_category`
+-- Indexes for table `commerce_category`
 --
-ALTER TABLE `comerce_category`
+ALTER TABLE `commerce_category`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -244,9 +251,9 @@ ALTER TABLE `circuit`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `comerce_category`
+-- AUTO_INCREMENT for table `commerce_category`
 --
-ALTER TABLE `comerce_category`
+ALTER TABLE `commerce_category`
   MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
