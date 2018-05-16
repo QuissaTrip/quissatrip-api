@@ -49,5 +49,11 @@
 	// Rotas relacionadas as entidades
 	require 'routes/entity.php';
 
+	// Rotas relacionadas aos comércios
+	require 'routes/commerce.php';
+
+	// Rotas relacionadas aos circuitos
+	require 'routes/circuit.php';
+
 	$app->run();
 ?>

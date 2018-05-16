@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 14-Maio-2018 às 18:43
+-- Generation Time: 16-Maio-2018 às 17:45
 -- Versão do servidor: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -65,9 +65,9 @@ INSERT INTO `commerce_category` (`id`, `nome`, `descricao`, `imagem`) VALUES
 (1, 'Lanchonetes', '', ''),
 (2, 'Hotéis', '', ''),
 (3, 'Postos de Gasolina', '', ''),
-(4, 'Serviços', '', ''),
 (5, 'Diversão', '', ''),
-(6, 'Banco', '', '');
+(6, 'Banco', '', ''),
+(7, 'Mercado', '', '');
 
 -- --------------------------------------------------------
 
@@ -106,7 +106,8 @@ INSERT INTO `entity` (`name`, `address`, `address_extra`, `description`, `info`,
 ('Estação Ferroviária Conde de Araruama', 'Rodovia QSM 007, Km 1,7', '', 'Inaugurada em 1875, teve grande importância para o município por ter sido o centro comercial da cidade entre os séculos XIX e XX. Foi construida para que o transporte de cargas e passageiros entre as propriedades açucareiras fosse mais rápido.</p></br><p>Suas ramificações possibilitavam o acesso às fazendas de Mandiquera, Machadinha, São Miguel, Santa Francisca e outras.</p></br><p>Foi o primeiro local da cidade a ter telefone.', 'Telefone: 2768-9300', 0, 1, 0, 0, 0, 3, '-22.0712509', '-41.6053964', '10:00', '17:00', 5),
 ('Fazenda Trindade', 'RJ 196, km 13, Quissamã', '', 'Concluída em 1909, a sede da Fazenda Trindade tem o estilo dos chalés românticos do fim do século XIX. Além da sede, encontram-se preservadas algumas moradias de colonos e uma antiga casa de farinha. Trabalhado em pedra mármore colorida, com um desenho que forma um relógio de sol, o terraço fronteiro foi trazido da Casa de Capivari. Hoje, a fazenda, além de servir como residência, produz coco e abacaxi e possui criação de gado.', '<p><strong>Telefone:</strong> (22) 2768-1306<br><br><strong>Endereço:</strong> RJ 196, km 13<br><br><b>Visitas:</b><br>As visitas devem ser agendadas com antecedência nas agências de turismo de Quissamã.</p>', 0, 1, 0, 0, 0, 3, '-22.1071124', '-41.473509', '10:00', '17:00', 6),
 ('São Manoel', 'RJ-196', '', 'A fazenda encontra-se em ótimo estado de conservação. Construída no fim do século XIX, a casa mostra aspectos do fim da era neoclássica e do início da era eclética. Podemos observar isso nos arcos góticos da fachada a transição.</p><p>Na fazenda ainda estão móveis e objetos da época, além de várias construções também antigas ao seu redor.', 'As visitas devem ser agendadas com antecedência em agências de turismo de Quissamã', 0, 1, 0, 0, 0, 3, '-22.0924758', '-41.5756654', '10:00', '17:00', 7),
-('Fazenda Mandiquera', 'Rodovia QSM 006, Km 1', '', '<p>O projeto original é do arquiteto e empreiteiro alemão Antônio Becker. A sede da fazenda é um importante solar em estilo neoclássico</p><p>Inaugurado em 1875, a construção é considerada uma obra monumental para os padrões da oligarquia canavieira da época.</p><p>Além de ter recebido a visita do Imperador Dom Pedro II, a sede da fazenda também foi locação para os filmes O Coronel e o Lobisomem (2005) e Deu no New York Times (1987).</p><p>A Fazenda Mandiquera foi tombada pelo Instituto Estadual do Patrimônio Cultural (Inepac) em 2007.</p>', 'Telefone: 2768-9300', 0, 1, 0, 0, 0, 3, '-22.1191788', '-41.516186', '10:00', '17:00', 8);
+('Fazenda Mandiquera', 'Rodovia QSM 006, Km 1', '', '<p>O projeto original é do arquiteto e empreiteiro alemão Antônio Becker. A sede da fazenda é um importante solar em estilo neoclássico</p><p>Inaugurado em 1875, a construção é considerada uma obra monumental para os padrões da oligarquia canavieira da época.</p><p>Além de ter recebido a visita do Imperador Dom Pedro II, a sede da fazenda também foi locação para os filmes O Coronel e o Lobisomem (2005) e Deu no New York Times (1987).</p><p>A Fazenda Mandiquera foi tombada pelo Instituto Estadual do Patrimônio Cultural (Inepac) em 2007.</p>', 'Telefone: 2768-9300', 0, 1, 0, 0, 0, 3, '-22.1191788', '-41.516186', '10:00', '17:00', 8),
+('Orla II', 'Rua banana com chocolate e maçã', '', 'Mercado lero lero lero lero lero lero', 'Lorem Ipsum dolor asium apmert', 1, 0, 0, 0, 7, 0, '-22', '22', '08:00', '20:00', 9);
 
 -- --------------------------------------------------------
 
@@ -184,6 +185,8 @@ CREATE TABLE `rolezinho_views` (
 CREATE TABLE `user` (
   `id` int(255) NOT NULL,
   `nome` varchar(150) NOT NULL,
+  `email` varchar(300) NOT NULL,
+  `cpf` varchar(12) NOT NULL,
   `avatar` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -191,8 +194,8 @@ CREATE TABLE `user` (
 -- Extraindo dados da tabela `user`
 --
 
-INSERT INTO `user` (`id`, `nome`, `avatar`) VALUES
-(1, 'Lucas Craveiro Paes', 'https://pbs.twimg.com/profile_images/869292124986126338/keoLQCJh_400x400.jpg');
+INSERT INTO `user` (`id`, `nome`, `email`, `cpf`, `avatar`) VALUES
+(1, 'Lucas Craveiro Paes', 'lucascraveiropaes123@gmail.com', '15933133736', 'https://pbs.twimg.com/profile_images/869292124986126338/keoLQCJh_400x400.jpg');
 
 --
 -- Indexes for dumped tables
@@ -254,13 +257,13 @@ ALTER TABLE `circuit`
 -- AUTO_INCREMENT for table `commerce_category`
 --
 ALTER TABLE `commerce_category`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `entity`
 --
 ALTER TABLE `entity`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `images`
@@ -272,7 +275,7 @@ ALTER TABLE `images`
 -- AUTO_INCREMENT for table `rolezinho`
 --
 ALTER TABLE `rolezinho`
-  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `rolezinho_views`
@@ -284,7 +287,7 @@ ALTER TABLE `rolezinho_views`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
