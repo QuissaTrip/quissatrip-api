@@ -1,16 +1,13 @@
 <?php
-
-    $app->get('/entity', function ($request, $response, $args) {
-        $entities = db_query("SELECT id, name, description, is_place, is_commerce, is_event, is_other, commerce_category, circuit_id FROM entity");
-
+    function formatEntities($entities) {
         $newEntities = array();
 
         foreach ($entities as $entity) {
-            if ($entity["is_place"] == true)
+            if (isset($entity["is_place"]) and $entity["is_place"] == true)
                 $category = "Lugar";
-            else if ($entity["is_commerce"] == true)
+            else if (isset($entity["is_commerce"]) and $entity["is_commerce"] == true)
                 $category = "Comércio";
-            else if ($entity["is_event"] == true)
+            else if (isset($entity["is_event"]) and $entity["is_event"] == true)
                 $category = "Evento";
             else
                 $category = "";
@@ -33,7 +30,7 @@
             $image = "";
 
             if ( count($bd_images) > 0 ) {
-                $image = $bd_images[0];
+                $image = $bd_images[0]["image_url"];
             }
 
             $newEntities[] = array(
@@ -46,7 +43,23 @@
             );
         }
 
-		return $response->withJson( utf8ize($newEntities) );
+        return $newEntities;
+    }
+
+    $app->get('/places', function ($request, $response, $args) {
+        $entities = db_query("SELECT id, name, description, commerce_category, circuit_id FROM entity WHERE is_place = 1");
+
+        $entities = formatEntities($entities);
+
+		return $response->withJson( utf8ize($entities) );
+    });
+
+    $app->get('/entity', function ($request, $response, $args) {
+        $entities = db_query("SELECT id, name, description, is_place, is_commerce, is_event, is_other, commerce_category, circuit_id FROM entity");
+
+        $entities = formatEntities($entities);
+
+		return $response->withJson( utf8ize($entities) );
     });
 
     $app->get('/entity/{ id }', function ($request, $response, $args) {
@@ -68,7 +81,7 @@
         );
 
         if ($entity["is_commerce"] == true) {
-            $commerce_category = db_query("SELECT * FROM commerce_category WHERE id = " . $entity["comerce_category"], 1);
+            $commerce_category = db_query("SELECT * FROM commerce_category WHERE id = " . $entity["commerce_category"], 1);
 
             $newEntity["category_name"] = $commerce_category[0]["nome"];
             $newEntity["category_id"] = $commerce_category[0]["id"];

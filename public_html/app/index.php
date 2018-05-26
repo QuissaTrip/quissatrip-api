@@ -3,8 +3,8 @@
 	session_start();
 	error_reporting(E_ALL);
 
-	require 'vendor/autoload.php';
-	require 'database/connection.php';
+	require '../../app/vendor/autoload.php';
+	require '../../app/database/connection.php';
 	use Psr\Http\Message\RequestInterface as Request;
 	use Psr\Http\Message\ResponseInterface as Response;
 	use Slim\Http\UploadedFile;
@@ -33,12 +33,11 @@
 	    return $next($request, $response);
 	});
 
+	$routers = glob('../../app/routes/*.php');
 
-	/*******************************************************************************\
-	|                                                                               |
-	|                                   Rotas                                       |
-	|                                                                               |
-	\*******************************************************************************/
+    foreach ($routers as $router) {
+        require $router;
+    }
 
 	$app->get('/', function ($request, $response) {
 		return $response->withJson(array(
@@ -46,14 +45,5 @@
 		));
 	});
 
-	// Rotas relacionadas as entidades
-	require 'routes/entity.php';
-
-	// Rotas relacionadas aos comércios
-	require 'routes/commerce.php';
-
-	// Rotas relacionadas aos circuitos
-	require 'routes/circuit.php';
-
-	$app->run();
+    $app->run();
 ?>
