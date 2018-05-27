@@ -1,5 +1,7 @@
 <?php
     // Importando config e criando conexão com o banco de dados
+    define('SECRET_KEY', "quissatrip-melhor-app");
+
     $config = include(__DIR__ . '/config.php');
     $conn = new PDO("mysql:host=".$config['db']['host'].";dbname=".$config['db']['name'], $config['db']['user'], $config['db']['password'] );
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -19,7 +21,11 @@
             else
                 $stmt->execute();
 
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if (strpos($query, "INSERT") >= 0) {
+                return $conn->lastInsertId();;
+            } else {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
         } else {
             return null;
         }
