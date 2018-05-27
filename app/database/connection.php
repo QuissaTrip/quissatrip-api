@@ -3,6 +3,10 @@
     $config = include(__DIR__ . '/config.php');
     $conn = new PDO("mysql:host=".$config['db']['host'].";dbname=".$config['db']['name'], $config['db']['user'], $config['db']['password'] );
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $whitelist = array(
+        '127.0.0.1',
+        '::1'
+    );
 
     function db_query($query = null, $numOfResults = null) {
         global $conn;
@@ -22,13 +26,17 @@
     }
 
     function utf8ize($d) {
-        if (is_array($d)) {
-			foreach ($d as $k => $v) {
-				$d[$k] = utf8ize($v);
-			}
-		} else if (is_string($d)) {
-			return utf8_encode($d);
-		}
+        global $whitelist;
+
+        if( in_array($_SERVER['REMOTE_ADDR'], $whitelist) ) {
+            if (is_array($d)) {
+    			foreach ($d as $k => $v) {
+    				$d[$k] = utf8ize($v);
+    			}
+    		} else if (is_string($d)) {
+    			return utf8_encode($d);
+    		}
+        }
 		return $d;
     }
 ?>

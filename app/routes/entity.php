@@ -1,67 +1,4 @@
 <?php
-    function formatEntities($entities) {
-        $newEntities = array();
-
-        foreach ($entities as $entity) {
-            if (isset($entity["is_place"]) and $entity["is_place"] == true)
-                $category = "Lugar";
-            else if (isset($entity["is_commerce"]) and $entity["is_commerce"] == true)
-                $category = "Comércio";
-            else if (isset($entity["is_event"]) and $entity["is_event"] == true)
-                $category = "Evento";
-            else
-                $category = "";
-
-            $excerpt = mb_convert_encoding(substr($entity["description"], 0, 50),"UTF-8","auto");
-
-            if ($entity["commerce_category"] != 0) {
-                $commerce_category = db_query("SELECT * FROM commerce_category WHERE id = " . $entity["commerce_category"], 1);
-
-                if ( count($commerce_category) > 0 ) {
-                    $commerce_name = $commerce_category[0]["nome"];
-                } else {
-                    $commerce_name = null;
-                }
-            } else {
-                $commerce_name = null;
-            }
-
-            $bd_images = db_query("SELECT image_url FROM images WHERE entity_id = " . $entity["id"], 1);
-            $image = "";
-
-            if ( count($bd_images) > 0 ) {
-                $image = $bd_images[0]["image_url"];
-            }
-
-            $newEntities[] = array(
-                'id' => $entity["id"],
-                'name' => $entity["name"],
-                'description' => trim($excerpt) . "...",
-                'category' => $category,
-                'commerce_category' => $commerce_name,
-                'images' => $image
-            );
-        }
-
-        return $newEntities;
-    }
-
-    $app->get('/places', function ($request, $response, $args) {
-        $entities = db_query("SELECT id, name, description, commerce_category, circuit_id FROM entity WHERE is_place = 1");
-
-        $entities = formatEntities($entities);
-
-		return $response->withJson( utf8ize($entities) );
-    });
-
-    $app->get('/entity', function ($request, $response, $args) {
-        $entities = db_query("SELECT id, name, description, is_place, is_commerce, is_event, is_other, commerce_category, circuit_id FROM entity");
-
-        $entities = formatEntities($entities);
-
-		return $response->withJson( utf8ize($entities) );
-    });
-
     $app->get('/entity/{ id }', function ($request, $response, $args) {
         $id = $request->getAttribute("route")->getArgument("id");
 
@@ -83,7 +20,7 @@
         if ($entity["is_commerce"] == true) {
             $commerce_category = db_query("SELECT * FROM commerce_category WHERE id = " . $entity["commerce_category"], 1);
 
-            $newEntity["category_name"] = $commerce_category[0]["nome"];
+            $newEntity["category_name"] = $commerce_category[0]["name"];
             $newEntity["category_id"] = $commerce_category[0]["id"];
         }
         else if ($entity["is_place"] == true) {
@@ -94,13 +31,12 @@
         }
 
         $newEntity["images"] = array();
-        $images = db_query("SELECT * FROM images WHERE entity_id = " . $entity["id"], 1);
+        $images = db_query("SELECT * FROM images WHERE entity_id = " . $entity["id"]);
 
         foreach ($images as $image) {
             $newEntity["images"][] = $image["image_url"];
         }
 
-		return $response->withJson( utf8ize($newEntity) );
+        return $response->withJson( utf8ize($newEntity) );
     });
-
 ?>
