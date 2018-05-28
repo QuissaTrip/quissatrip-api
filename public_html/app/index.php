@@ -3,12 +3,14 @@
 	session_cache_limiter(false);
 	session_start();
 	error_reporting(E_ALL);
+    define('UPLOAD_DIRECTORY', __DIR__ . "/files");
 
 	require '../../app/vendor/autoload.php';
 	require '../../app/database/connection.php';
+	require '../../app/functions.php';
 	use Psr\Http\Message\RequestInterface as Request;
 	use Psr\Http\Message\ResponseInterface as Response;
-	use Slim\Http\UploadedFile;
+	use Slim\Http\UploadedFile as UploadedFile;
 
 	$app = new \Slim\App(array(
 		'settings' => [
@@ -33,6 +35,19 @@
 	    }
 	    return $next($request, $response);
 	});
+
+	$app->add(function ($req, $res, $next) {
+	    $response = $next($req, $res);
+	    return $response
+	            ->withHeader('Access-Control-Allow-Origin', '*') //dies gewährleistet den Zugriff für alle extere Programme und sollte nur zur Entwicklung genutzt werden
+	            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+	            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+	});
+	/*
+	 *
+	 * Fim
+	 *
+	 */
 
 	$routers = glob('../../app/routes/*.php');
 

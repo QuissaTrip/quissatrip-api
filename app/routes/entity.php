@@ -8,6 +8,7 @@
             'id' => $entity["id"],
             'name' => $entity["name"],
             'address' => $entity["address"],
+            'phone' => $entity["phone"],
             'address_extra' => $entity["address_extra"],
             'description' => $entity["description"],
             'info' => $entity["info"],

@@ -1,9 +1,4 @@
 <?php
-    function createToken($data) {
-        $tokenGeneric = SECRET_KEY . $_SERVER["SERVER_NAME"];
-        return hash('sha512', $tokenGeneric . $data);
-    }
-
     $app->post('/user/login', function ($request, $response, $args) {
         $data = $request->getParsedBody();
 
