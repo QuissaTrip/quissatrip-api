@@ -5,7 +5,7 @@
         $email = trim($data["email"]);
         $password = hash('sha512', $data["password"]);
 
-        $user = db_query("SELECT id, name, email, avatar FROM user WHERE email = '" . $email . "' AND password = '" . $password . "'");
+        $user = db_query("SELECT id, name, email, avatar, cpf FROM user WHERE email = '" . $email . "' AND password = '" . $password . "'");
 
         if (count($user) > 0) {
             $user = $user[0];
@@ -63,6 +63,17 @@
         $cpf = str_replace( "-", "", $cpf);
         $avatar = $data["avatar"];
 
+        $hasUser = db_query("SELECT email, cpf FROM user WHERE email = '" . $email . "' OR cpf = '" . $cpf . "'");
+
+        if (count($hasUser) > 0) {
+            return $response->withJson(utf8ize(
+                array(
+                    "status" => false,
+                    "errors" => ["Já existe um usuário com esse email ou CPF"]
+                )
+            ));
+        }
+
         $userID = db_query("INSERT INTO user (name, email, password, cpf, avatar) VALUES ('$name', '$email', '$password', '$cpf', '$avatar')");
 
         return $response->withJson(utf8ize(
@@ -72,7 +83,6 @@
                     "id" => $userID,
                     "name" => $name,
                     "email" => $email,
-                    "password" => $password,
                     "cpf" => $cpf,
                     "avatar" => $avatar,
                     "token" => createToken($email)

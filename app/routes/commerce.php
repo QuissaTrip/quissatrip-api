@@ -3,12 +3,18 @@
         $commerces = db_query("SELECT * FROM commerce_category");
 
         return $response->withJson( utf8ize($commerces) );
-        //return $response->withJson( $commerces );
     });
 
     $app->get('/commerces', function ($request, $response, $args) {
-        $db_commerces = db_query("SELECT id, name, description, commerce_category, circuit_id FROM entity WHERE is_commerce = 1");
+        $params = $request->getQueryParams();
+        $query = "SELECT id, name, description, commerce_category, circuit_id FROM entity WHERE is_commerce = 1";
         $newCommerces = array();
+
+        if (isset($params["category"])) {
+            $query = $query . " AND commerce_category = " . $params["category"];
+        }
+
+        $db_commerces = db_query($query);
 
         foreach ($db_commerces as $commerce) {
             $category = db_query("SELECT id, name FROM commerce_category WHERE id = " . $commerce["commerce_category"])[0];

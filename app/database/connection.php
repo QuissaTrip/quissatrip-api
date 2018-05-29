@@ -19,12 +19,15 @@
             else
                 $stmt->execute();
 
-            $isInsert = strpos($query, "INSERT");
-
-            if (strpos($query, "INSERT") >= 0 && $isInsert !== false) {
+            if (strpos($query, "INSERT") >= 0 && strpos($query, "INSERT") !== false) {
                 return $conn->lastInsertId();
             } else {
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if ((strpos($query, "DELETE") >= 0 && strpos($query, "DELETE") !== false) ||
+                    (strpos($query, "UPDATE") >= 0 && strpos($query, "UPDATE") !== false)) {
+                    return true;
+                } else {
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
             }
         } else {
             return null;
