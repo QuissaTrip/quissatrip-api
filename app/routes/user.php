@@ -1,4 +1,7 @@
 <?php
+    /******************************************/
+    /*              LOGIN ROUTE               */
+    /******************************************/
     $app->post('/user/login', function ($request, $response, $args) {
         $data = $request->getParsedBody();
 
@@ -38,6 +41,10 @@
         return $error;
     }
 
+    /******************************************/
+    /*              CREATE ROUTE              */
+    /******************************************/
+
     $app->post('/user/new', function ($request, $response, $args) {
         $data = $request->getParsedBody();
 
@@ -53,7 +60,7 @@
         }
 
         if ( !array_key_exists("avatar", $data) || null == $data["avatar"] || $data["avatar"] == "") {
-            $data["avatar"] = "http://lucascraveiropaes.com/app/files/user.png";
+            $data["avatar"] = API_BASE + "/files/user.png";
         }
 
         $name = trim($data["name"]);
@@ -70,6 +77,90 @@
                 array(
                     "status" => false,
                     "errors" => ["Já existe um usuário com esse email ou CPF"]
+                )
+            ));
+        }
+
+        $userID = db_query("INSERT INTO user (name, email, password, cpf, avatar) VALUES ('$name', '$email', '$password', '$cpf', '$avatar')");
+
+        return $response->withJson(utf8ize(
+            array(
+                "status" => true,
+                "user" => array(
+                    "id" => $userID,
+                    "name" => $name,
+                    "email" => $email,
+                    "cpf" => $cpf,
+                    "avatar" => $avatar,
+                    "token" => createToken($email)
+                )
+            )
+        ));
+    });
+
+    //******************************************//
+    //               UPDATE ROUTE               //
+    //******************************************//
+
+    $app->post('/user/update', function ($request, $response, $args) {
+        $data = $request->getParsedBody();
+        $uploadedFiles = $request->getUploadedFiles();
+
+        $user_id = $data['user_id'];
+        $request_token = $data['token'];
+
+        $errors = checkData($data);
+
+        if (count($errors) > 0) {
+            return $response->withJson(utf8ize(
+                array(
+                    "status" => false,
+                    "errors" => $errors
+                )
+            ));
+        }
+
+        $is_valid = checkToken($user_id, $request_token);
+
+        if ($is_valid == false) {
+            return $response->withJson(utf8ize(
+                array(
+                    "status" => false,
+                    "errors" => ["Você não possui permissão para fazer essa modificação"]
+                )
+            ));
+        }
+
+        if ( !array_key_exists("avatar", $uploadedFiles) || null == $uploadedFiles["avatar"] || $uploadedFiles["avatar"] == "") {
+            $avatar = API_BASE . "/files/user.png";
+        } else {
+            $avatar = $uploadedFiles['avatar'];
+            $folder = UPLOAD_DIRECTORY . "/users";
+
+            // Deletando avatar antigo
+            $oldAvatar = db_query("SELECT avatar FROM user WHERE id = $user_id")[0]["avatar"];
+            unlink( $folder . "/" . basename($oldAvatar) );
+
+            // Subindo para o servidor a imagem do novo avatar
+            if ($avatar->getError() === UPLOAD_ERR_OK) {
+                $filename = moveUploadedFile($folder, $avatar);
+                $avatar = "http://" . $_SERVER['SERVER_NAME'] . "/app/files/users/" . $filename;
+            }
+        }
+
+        $name = trim($data["name"]);
+        $email = trim($data["email"]);
+        $password = hash('sha512', $data["password"]);
+        $cpf = str_replace(".", "", trim($data["cpf"]) );
+        $cpf = str_replace( "-", "", $cpf);
+
+        $updated = db_query("UPDATE user SET name = '$name', email = '$email', password = '$password', cpf = '$cpf', avatar = '$avatar' WHERE id = '$user_id'");
+
+        if ($updated !== true) {
+            return $response->withJson(utf8ize(
+                array(
+                    "status" => false,
+                    "errors" => ["Não foi possível atualizar seu perfil"]
                 )
             ));
         }

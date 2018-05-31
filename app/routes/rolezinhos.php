@@ -57,7 +57,7 @@
         $data = $request->getParsedBody();
         $uploadedFiles = $request->getUploadedFiles();
 
-        move_uploaded_file($data["media"], __DIR__);
+        //move_uploaded_file($data["media"], __DIR__);
 
         $errors = checkRole($data);
 
@@ -73,7 +73,6 @@
         $text = $data['text'];
         $user_id = $data['user_id'];
         $request_token = $data['token'];
-
 
         if ( checkToken($user_id, $request_token) ) {
             $media = $uploadedFiles['media'];
