@@ -51,9 +51,21 @@
                 $sql_query .= "close = '" . str_replace("-", ":", $params["close"]) . "'";
             }
 
+            $search_results = db_query($sql_query);
+
+            for ($i=0; $i < count($search_results); $i++) {
+                $image = db_query("SELECT image_url FROM images WHERE entity_id = " . $search_results[$i]["id"] . " LIMIT 1");
+
+                if (count($image) > 0) {
+                    $search_results[$i]["image"] = $image[0]["image_url"];
+                } else {
+                    $search_results[$i]["image"] = "";
+                }
+            }
+
             $myResponse = array(
                 "status" => true,
-                "search" => db_query($sql_query)
+                "search" => $search_results
             );
         }
 

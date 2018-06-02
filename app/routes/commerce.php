@@ -19,8 +19,12 @@
         foreach ($db_commerces as $commerce) {
             $category = db_query("SELECT id, name FROM commerce_category WHERE id = " . $commerce["commerce_category"])[0];
 
-            $excerpt = trim(mb_convert_encoding(substr($commerce["description"], 0, 50),"UTF-8","auto")) . "...";
+            $excerpt = trim(mb_convert_encoding(substr($commerce["description"], 0, 50),"UTF-8","auto"));
             $image = db_query("SELECT image_url FROM images WHERE entity_id = " . $commerce["id"] . " LIMIT 1");
+
+            if (strlen($excerpt) == 50) {
+                $excerpt .= "...";
+            }
 
             if (count($image) > 0) {
                 $image = $image[0]["image_url"];

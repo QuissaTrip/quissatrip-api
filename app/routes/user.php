@@ -10,10 +10,18 @@
 
         $user = db_query("SELECT id, name, email, avatar, cpf FROM user WHERE email = '" . $email . "' AND password = '" . $password . "'");
 
-        if (count($user) > 0) {
-            $user = $user[0];
-            $user["token"] = createToken($user["email"]);
+        if (count($user) == 0) {
+            return $response->withJson(utf8ize(
+                array(
+                    "status" => false,
+                    "dsf" => [$email, $password],
+                    "errors" => ["Senha ou login incorretos"]
+                )
+            ));
         }
+
+        $user = $user[0];
+        $user["token"] = createToken($user["email"]);
 
         $myResponse = array(
             "status" => true,
@@ -139,22 +147,33 @@
 
             // Deletando avatar antigo
             $oldAvatar = db_query("SELECT avatar FROM user WHERE id = $user_id")[0]["avatar"];
-            unlink( $folder . "/" . basename($oldAvatar) );
 
-            // Subindo para o servidor a imagem do novo avatar
-            if ($avatar->getError() === UPLOAD_ERR_OK) {
-                $filename = moveUploadedFile($folder, $avatar);
-                $avatar = "http://" . $_SERVER['SERVER_NAME'] . "/app/files/users/" . $filename;
+            if ($avatar !== $oldAvatar) {
+                unlink( $folder . "/" . basename($oldAvatar) );
+
+                // Subindo para o servidor a imagem do novo avatar
+                if ($avatar->getError() === UPLOAD_ERR_OK) {
+                    $filename = moveUploadedFile($folder, $avatar);
+                    $avatar = "http://" . $_SERVER['SERVER_NAME'] . "/app/files/users/" . $filename;
+                }
             }
         }
 
         $name = trim($data["name"]);
         $email = trim($data["email"]);
-        $password = hash('sha512', $data["password"]);
         $cpf = str_replace(".", "", trim($data["cpf"]) );
         $cpf = str_replace( "-", "", $cpf);
+        $query = "UPDATE user SET name = '$name', email = '$email', avatar = '$avatar', cpf = '$cpf'";
 
-        $updated = db_query("UPDATE user SET name = '$name', email = '$email', password = '$password', cpf = '$cpf', avatar = '$avatar' WHERE id = '$user_id'");
+        if ($data["password"] !== "password") {
+            $password = hash('sha512', $data["password"]);
+
+            $query .= ", password = '$password'";
+        }
+
+        $query .= " WHERE id = $user_id";
+
+        $updated = db_query($query);
 
         if ($updated !== true) {
             return $response->withJson(utf8ize(
@@ -165,13 +184,11 @@
             ));
         }
 
-        $userID = db_query("INSERT INTO user (name, email, password, cpf, avatar) VALUES ('$name', '$email', '$password', '$cpf', '$avatar')");
-
         return $response->withJson(utf8ize(
             array(
                 "status" => true,
                 "user" => array(
-                    "id" => $userID,
+                    "id" => $user_id,
                     "name" => $name,
                     "email" => $email,
                     "cpf" => $cpf,
@@ -180,6 +197,11 @@
                 )
             )
         ));
+    });
+
+
+    $app->get('/hash', function ($request, $response, $args) {
+        var_dump(hash('sha512', "lucas123"));
     });
 
 ?>

@@ -14,8 +14,12 @@
             $myResponse = array();
             foreach ($db_places as $place) {
                 $category = "Lugar";
-                $excerpt = trim(mb_convert_encoding(substr($place["description"], 0, 50),"UTF-8","auto")) . "...";
+                $excerpt = trim(mb_convert_encoding(substr($place["description"], 0, 50),"UTF-8","auto"));
                 $image = db_query("SELECT image_url FROM images WHERE entity_id = " . $place["id"] . " LIMIT 1");
+
+                if (strlen($excerpt) == 50) {
+                    $excerpt .= "...";
+                }
 
                 if (count($image) > 0) {
                     $image = $image[0]["image_url"];
