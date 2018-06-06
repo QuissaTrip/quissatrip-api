@@ -7,7 +7,7 @@
 
     $app->get('/commerces', function ($request, $response, $args) {
         $params = $request->getQueryParams();
-        $query = "SELECT id, name, description, commerce_category, circuit_id FROM entity WHERE is_commerce = 1";
+        $query = "SELECT id, name, description, commerce_category FROM entity WHERE is_commerce = 1";
         $newCommerces = array();
 
         if (isset($params["category"])) {

@@ -27,12 +27,12 @@
                     $sql_query .= "is_event = 1 ";
             }
 
-            if (isset($params["circuit"])) {
+            if (isset($params["category"])) {
                 if ($hasFilter) {
                     $sql_query .= " AND ";
                 }
                 $hasFilter = true;
-                $sql_query .= "circuit_id = " . $params["circuit"];
+                $sql_query .= "category_id = " . $params["category"];
             }
 
             if (isset($params["open"])) {

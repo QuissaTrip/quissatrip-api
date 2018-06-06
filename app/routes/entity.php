@@ -25,10 +25,10 @@
             $newEntity["category_id"] = $commerce_category[0]["id"];
         }
         else if ($entity["is_place"] == true) {
-            $circuit = db_query("SELECT * FROM circuit WHERE id = " . $entity["circuit_id"], 1);
+            $category = db_query("SELECT * FROM categories WHERE id = " . $entity["category_id"], 1);
 
-            $newEntity["circuit_name"] = $circuit[0]["name"];
-            $newEntity["circuit_id"] = $circuit[0]["id"];
+            $newEntity["category_name"] = $category[0]["name"];
+            $newEntity["category_id"] = $category[0]["id"];
         }
 
         $newEntity["images"] = array();

@@ -4,7 +4,7 @@
             'user' => 'root',
             'password' => '',
             'host' => 'localhost',
-            'name' => 'quissatrip'
+            'name' => 'u464988729_app'
         ]
     );
 ?>

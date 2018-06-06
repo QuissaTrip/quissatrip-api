@@ -1,10 +1,10 @@
 <?php
     $app->get('/places', function ($request, $response, $args) {
         $params = $request->getQueryParams();
-        $query = "SELECT id, name, description, circuit_id FROM entity WHERE is_place = 1";
+        $query = "SELECT id, name, description, category_id FROM entity WHERE is_place = 1";
 
-        if (isset($params["circuit"])) {
-            $query = $query . " AND circuit_id = " . $params["circuit"];
+        if (isset($params["category"])) {
+            $query = $query . " AND category_id = " . $params["category"];
         }
 
         $db_places = db_query($query);
